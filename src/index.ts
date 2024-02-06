@@ -35,7 +35,8 @@ export const handler: KinesisStreamHandler = async (event: KinesisStreamEvent, _
 			logger.info(`Processed Kinesis Event - EventID: ${recordData.eventId}`)
 
 			const kinesisClient = new AWSKinesisClient('user-limit-events', recordData.eventId)
-			const userLimitRepository = process.env.DB === 'inMemory' ? new UserLimitInMemoryDBRepository(recordData.eventId) : new UserLimitDynamoDBRepository(recordData.eventId)
+			const userLimitRepository =
+				process.env.DB === 'inMemory' ? new UserLimitInMemoryDBRepository(recordData.eventId) : new UserLimitDynamoDBRepository(recordData.eventId)
 			const recordHandlerService = new UserLimitEventHandlerService(userLimitRepository, kinesisClient, recordData.eventId)
 
 			await handle(recordHandlerService, {
