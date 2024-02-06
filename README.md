@@ -54,25 +54,25 @@ Sub tickets for this ask are: - Create v2 of service, in the API style using the
 
 API Endpoint:
 
-1. /users-limit/{id}
+1. `/users-limit/{id}`
 
 ```json
 Response: {
     "userId": "123",
     "limitId": "123",
-    "value": "1000"
+    "value": "1000",
     "progress": "750",
     "nextResetTime" : 123456
 }
 ```
 
-2. /user-limits/user/{user_id}
+2. `/user-limits/user/{user_id}`
 
 ```json
 Response: [
     {
         "limitId": "123",
-        "value": "1000"
+        "value": "1000",
         "progress": "750",
         "nextResetTime" : 123456
     }
