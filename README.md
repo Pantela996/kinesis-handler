@@ -29,13 +29,13 @@ For local purpose AWS Kinesis Client is disabled, for the Docker purpose you can
 
 ## Decision Making
 
-This is short running service, but also this service is handling more different records. One of the crucial points of working with Lambda functions is good logging, so for each record that is processed at that moment (notice that we are forcing synchronous processing of the data), we are enforcing the current `eventId` to be injected in every service. Also every service will create it's on own `Logger` that will add `ServiceName` to the every log produced by it. 
+This is short running service, but also this service is handling more different records. One of the crucial points of working with Lambda functions is good logging, so for each record that is processed at that moment (notice that we are forcing synchronous processing of the data), we are enforcing the current `eventId` to be injected in every service. Also every service will create it's on own `Logger` that will add `ServiceName` to the every log produced by it.
 
 Given that assignment was specifying that the Databases needed to be interchangeable, for this purpose classic `Repository pattern` was used. We will have interface with signatures that will both of the implementations implement. In this way, based on env variable `DB` at the start of the lambda service is deciding which Database it will use during the runtime.
 
 ## Answers
 
-1. Things I liked about the assignment is that I had opportunity to learn more about AWS Kinesis. I had opportunity to work with both SQS and SNS, so at the start I was bit confused what exactly is purpose of with compared to these 2. But reading documentation and with some implementation, and with context you are using it for, I have better grasp on how to use it and combine it with mentioned technologies. 
+1. Things I liked about the assignment is that I had opportunity to learn more about AWS Kinesis. I had opportunity to work with both SQS and SNS, so at the start I was bit confused what exactly is purpose of with compared to these 2. But reading documentation and with some implementation, and with context you are using it for, I have better grasp on how to use it and combine it with mentioned technologies.
 
 Also it was pretty easy to achieve the gist of the assignment, so I could focus more on the quality and reusability of the code I wrote.
 
@@ -43,23 +43,12 @@ The thing I think it could be better is explanation of the context of the `event
 
 Also some of the edge cases are not maybe defined as well, because it could be that one user can have more limits, or just one limit. Then when I want to save Limit that already exists should I throw the error or just override it? Some questions of that kind pop to my mind
 
-2. In order to change this service to better fulfill desired behavior, I would change it from short running type of task `Lambda` to something more long running like `ECS Task`. 
-This would consider changing of the structure of the code to be more in API style. Of course, we would also swap from `inMemoryDB` to some real DB, like `DynamoDB` in our example.
+2. In order to change this service to better fulfill desired behavior, I would change it from short running type of task `Lambda` to something more long running like `ECS Task`.
+   This would consider changing of the structure of the code to be more in API style. Of course, we would also swap from `inMemoryDB` to some real DB, like `DynamoDB` in our example.
 
-I would prefer API instead of the lambda for a few reasons.
-    - For the often communication between client and service, it's better to have standardized interface for communication
-    - Cost optimization, long running service should be more efficient solution for large number of requests
-    - Lambda limited runtime nature
-    - Lambda cold starts after period of not being used will impact the users
-    - ECS Tasks tend to have better latency
+I would prefer API instead of the lambda for a few reasons. - For the often communication between client and service, it's better to have standardized interface for communication - Cost optimization, long running service should be more efficient solution for large number of requests - Lambda limited runtime nature - Lambda cold starts after period of not being used will impact the users - ECS Tasks tend to have better latency
 
-Sub tickets for this ask are:
-    - Create v2 of service, in the API style using the Express
-    - Create new Database service
-    - Define the relational/non-relational schema for the Domain
-    - Define endpoints on the service for the client
-    - Define security mechanisms of the new serviceV2
-    - Write the migrations for the existing data in memory
+Sub tickets for this ask are: - Create v2 of service, in the API style using the Express - Create new Database service - Define the relational/non-relational schema for the Domain - Define endpoints on the service for the client - Define security mechanisms of the new serviceV2 - Write the migrations for the existing data in memory
 
 3. It would return most standard format, JSON, and the signatures would look something like this.
 
@@ -67,6 +56,7 @@ API Endpoint:
 
 1. /users-limit/{id}
 
+```json
 Response: {
     "userId": "123",
     "limitId": "123",
@@ -74,9 +64,11 @@ Response: {
     "progress": "750",
     "nextResetTime" : 123456
 }
+```
 
 2. /user-limits/user/{user_id}
 
+```json
 Response: [
     {
         "limitId": "123",
@@ -85,10 +77,10 @@ Response: [
         "nextResetTime" : 123456
     }
 ]
+```
 
-
-4. a. In this service, we are already utilizing the the interchangeability of the Databases using the Dependency Injection, with injecting the configuration with .env file. In this way we can make multistage and multi environment solution. 
+4. a. In this service, we are already utilizing the the interchangeability of the Databases using the Dependency Injection, with injecting the configuration with .env file. In this way we can make multistage and multi environment solution.
 
 b. This service currently support only few types of events, but it's easily extendable for new types of events, with different payloads. Introducing new types of entities should also not be the issue as it would require only adding handler, validations, repository, and model to add it to the code architecture.
 
-This solution was with purpose of it being interchangeable and easy to extend and reuse. 
+This solution was with purpose of it being interchangeable and easy to extend and reuse.
