@@ -64,19 +64,19 @@ API Endpoint:
     "progress": "750",
     "nextResetTime" : 123456
 }
-
-Response:
 ```
 
 2. `/user-limits/user/{user_id}`
 
 ```json
-{
-	"limitId": "123",
-	"value": "1000",
-	"progress": "750",
-	"nextResetTime": 123456
-}
+[
+	{
+		"limitId": "123",
+		"value": "1000",
+		"progress": "750",
+		"nextResetTime": 123456
+	}
+]
 ```
 
 4. a. In this service, we are already utilizing the the interchangeability of the Databases using the Dependency Injection, with injecting the configuration with .env file. In this way we can make multistage and multi environment solution.
