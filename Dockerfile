@@ -14,6 +14,8 @@ RUN apk update && apk upgrade
 
 WORKDIR /app
 
+ENV DB=inMemory
+
 COPY --from=build /tmp/build ./
 COPY  --from=build /tmp/node_modules ./node_modules
 COPY --from=build /tmp/config ./config
