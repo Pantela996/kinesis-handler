@@ -13,6 +13,8 @@ It also contains instance of the AWS Kinesis Client that is able to produce even
 
 There are multiple ways you are able to start this project.
 
+Precondition: set env variable `DB=inMemory` or create the .env file with values from the example .env_example. For Docker run second option is mandatory.
+
 1. First and easier one is using `docker-compose` with command `docker-compose up --build` at the root of the repository. This will run the script inside of the Docker container, and also will setup local version of Kinesis. For the example purposes, local version of Kinesis stream is set up, but publishing of the event is disabled for now.
 
 This Dockerfile base image is base image for Lambda, so the behavior we will get on the local runs, should be the same as behavior on the cloud.
